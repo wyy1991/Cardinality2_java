@@ -5,10 +5,15 @@ public class SocketForNext extends Thread{
 	
 	private Socket nextSocket = null;
 	private int port = 10000;
+	private PrintWriter out = null;
+	private BufferedReader in = null;
+	
 	
 	public SocketForNext(){
 		this.nextSocket = null;
 		this.port = 10000;
+		this.out = null;
+		this.in = null;
 		start();
 		
 	}
@@ -33,14 +38,50 @@ public class SocketForNext extends Thread{
 
 	    try { 
 	    	nextSocket = serverSocket.accept(); 
+	    	PrintWriter out = new PrintWriter(nextSocket.getOutputStream(), true);
+			BufferedReader in = new BufferedReader( new InputStreamReader( nextSocket.getInputStream()));
+			
+			serverSocket.close(); 
 	    } 
 	    catch (IOException e) { 
 	    	System.err.println("Accept failed."); 
 	    	System.exit(1); 
 	    } 
 	    
-	    System.out.println ("Connection to next node successful!");
-
+	    System.out.println ("[Next Node] Connected!");
+	    TCPsocket.nextConnected = true;
+	 
+	    
+	}
+	
+	public void sendToNextNode(String msg){
+		if (msg != null){
+			this.out.println(msg);
+			System.out.println("[To Next Node]" + msg);
+		}
+	}
+	
+	public void readFromNextNode(){
+		String inputLine = null; 
+		try {
+			inputLine = this.in.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("[From Next Node]" + inputLine);
+	}
+	
+	public void closeSocket(){
+		
+		try {
+			out.close(); 
+			in.close();
+			nextSocket.close(); 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 	
 	public String getMyIP(){
