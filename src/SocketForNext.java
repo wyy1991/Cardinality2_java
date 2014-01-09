@@ -8,6 +8,9 @@ public class SocketForNext extends Thread{
 	private PrintWriter out = null;
 	private BufferedReader in = null;
 	
+	private ObjectInputStream inputStream = null;
+	private ObjectOutputStream outputStream = null;
+	
 	
 	public SocketForNext(){
 		this.nextSocket = null;
@@ -32,14 +35,22 @@ public class SocketForNext extends Thread{
 		         portNumNotFound = true;
 		    } 
 		}
-		//System.out.println("IP:Host = " + getMyIP() + ":" + this.port);
+		
 		System.out.println("IP:Host = " + "127.0.0.1" + ":" + this.port);
+		char c = (char) ('A' -1 + this.port%10);
+		TCPsocket.nodeName = "" + c;
+		System.out.println("My Node Name : " + TCPsocket.nodeName);
+		
 	    System.out.println ("Waiting for connection.....");
 
 	    try { 
 	    	nextSocket = serverSocket.accept(); 
 	    	PrintWriter out = new PrintWriter(nextSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader( new InputStreamReader( nextSocket.getInputStream()));
+			
+			outputStream = new ObjectOutputStream(nextSocket.getOutputStream());
+        
+			
 			
 			serverSocket.close(); 
 	    } 
@@ -49,9 +60,19 @@ public class SocketForNext extends Thread{
 	    } 
 	    
 	    System.out.println ("[Next Node] Connected!");
+	    
 	    TCPsocket.nextConnected = true;
 	 
 	    
+	}
+	
+	
+	public void sendObjToNextNode(Msg obj){
+        try {
+			outputStream.writeObject(obj);
+		} catch (IOException e) {
+			System.out.println("[Error]send object!");
+		}
 	}
 	
 	public void sendToNextNode(String msg){

@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class Data {
@@ -57,8 +58,8 @@ public class Data {
 		return MurmurHash.hash64(data, length);
 	}
 	
-	public void shuffleLineOrder(){
-		
+	public void shuffleMyEncFile(){
+		Collections.shuffle(this.encryptedMyFile);
 	}
 	
 	public byte[] longToBytes(long x) {
