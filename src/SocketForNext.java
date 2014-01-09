@@ -49,7 +49,7 @@ public class SocketForNext extends Thread{
 			BufferedReader in = new BufferedReader( new InputStreamReader( nextSocket.getInputStream()));
 			
 			outputStream = new ObjectOutputStream(nextSocket.getOutputStream());
-        
+			inputStream = new ObjectInputStream(nextSocket.getInputStream());
 			
 			
 			serverSocket.close(); 

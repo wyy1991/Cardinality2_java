@@ -6,6 +6,8 @@ public class SocketForPrev extends Thread {
 	private Socket prevSocket = null;
     private PrintWriter out = null;
     private BufferedReader in = null;
+    private ObjectInputStream inputStream = null;
+	private ObjectOutputStream outputStream = null;
 	
 	
 	private String prevNodeIP = "127.0.0.1";
@@ -53,6 +55,10 @@ public class SocketForPrev extends Thread {
 	            this.prevSocket = new Socket(this.prevNodeIP, this.prevNodePort);
 	            out = new PrintWriter(this.prevSocket.getOutputStream(), true);
 	            in = new BufferedReader(new InputStreamReader(this.prevSocket.getInputStream()));
+	            
+	            outputStream = new ObjectOutputStream(prevSocket.getOutputStream());
+				inputStream = new ObjectInputStream(prevSocket.getInputStream());
+				
 	        } catch (UnknownHostException e) {
 	            System.err.println("Don't know about host: " + this.prevNodeIP);
 	            System.exit(1);
@@ -65,7 +71,7 @@ public class SocketForPrev extends Thread {
 	        TCPsocket.prevConnected = true;
 	        
 	        // start waiting for prev node 
-	        waitingForPrevNodeMsg();
+	        waitingForPrevNodeMsgObj();
 
 	}
 	
@@ -73,7 +79,14 @@ public class SocketForPrev extends Thread {
 		// check message
 		System.out.println("[From Prev]" + rawMsg);
 	}
+	public void pendingMsgObjFromPrev(Msg msgObj){
+		// check message
+		
+		System.out.println("[From Prev obj]" + msgObj.type  );
+	}
 	
+	/*
+	// this is for string 
 	public void waitingForPrevNodeMsg(){
 		String inputLine = null;
 		System.out.println("Waiting for prev node to send msg ...");
@@ -84,5 +97,20 @@ public class SocketForPrev extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+	}
+	*/
+	public void waitingForPrevNodeMsgObj(){
+		Msg msgIn = null;
+		try {
+			while((msgIn = (Msg) inputStream.readObject())!= null){
+				pendingMsgObjFromPrev(msgIn);
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

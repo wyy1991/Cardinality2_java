@@ -17,13 +17,7 @@ public class TCPsocket extends Thread{
 	public static void main(String[] args) throws IOException {
 
 
-		// read in file line by line
-		// E(m) encrypt line by line murmur encrypt
-		// P(E(m)) shuffle
-		myData = new Data();
-		myData.readInFile();
-		myData.encryptMyFile();
-		myData.shuffleMyEncFile();
+		
 		
 		
 		/*// test murmur hash
@@ -62,10 +56,18 @@ public class TCPsocket extends Thread{
 			;
 		}
 		// from here connected
+		// read in file line by line
+		// E(m) encrypt line by line murmur encrypt
+		// P(E(m)) shuffle
+		myData = new Data();
+		myData.readInFile();
+		myData.encryptMyFile();
+		myData.shuffleMyEncFile();
+		
+		
 		// send to next node
-		
-		
-		
+		Msg mymsg = Msg.createMyNewFileMsg();
+		next_socket.sendObjToNextNode(mymsg);
 		
 		stdIn.close();
 	}

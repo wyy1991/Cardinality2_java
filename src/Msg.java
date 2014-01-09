@@ -19,8 +19,8 @@ public class Msg {
 		content = con;
 	}
 	
-	public Msg createMyNewFileMsg(){
-		String t_tmp = "";
+	public static Msg createMyNewFileMsg(){
+		String t_tmp = "MsgNeedEncryption";
 		ArrayList<String> by_tmp = new ArrayList<String>();
 		by_tmp.add(TCPsocket.nodeName);
 		ArrayList<Long> con_tmp = TCPsocket.myData.encryptedMyFile;

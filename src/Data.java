@@ -15,7 +15,7 @@ public class Data {
 	
 	
 	public Data(){
-		fileName = "src/file.txt";
+		fileName = "src/" + TCPsocket.nodeName + ".txt";
 		myFile = new ArrayList<String>();
 		encryptedMyFile = new ArrayList<Long>();
 	}
@@ -29,7 +29,7 @@ public class Data {
 			    // put in to myFile
 				myFile.add(line);
 			}
-			System.out.println("read file end. Total line num = " + myFile.size());
+			System.out.println("read file" + this.fileName);
 		} catch (FileNotFoundException e) {
 			System.out.println("[Error] readInFile, file not found!");
 		} catch (IOException e) {
