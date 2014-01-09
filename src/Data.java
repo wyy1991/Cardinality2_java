@@ -123,4 +123,10 @@ public class Data {
 		}
 		return encFile;
 	}
+	
+	public void getSameNumOfLinesInFinalSet(){
+		// return how many are the same
+		// @@@ todo
+		System.out.println("[Data]process final set. Not implemented yet!!");
+	}
 }

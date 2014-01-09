@@ -66,6 +66,7 @@ public class TCPsocket extends Thread{
 			if (userInput.equals("c")){
 				// start checking the same ones
 				// @@@ todo 
+				myData.getSameNumOfLinesInFinalSet();
 			}
 			if (userInput.equals("q")){
 				//quit
@@ -73,8 +74,6 @@ public class TCPsocket extends Thread{
 				System.exit(1);
 			}
 		}
-		
-		
 		
 	}
 	
