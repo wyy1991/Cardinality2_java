@@ -21,6 +21,7 @@ public class Data {
 	}
 	
 	public void readInFile(){
+		System.out.print("[Data] start read in file...");
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
@@ -29,7 +30,7 @@ public class Data {
 			    // put in to myFile
 				myFile.add(line);
 			}
-			System.out.println("read file" + this.fileName);
+			System.out.println("[Data]read file" + this.fileName);
 		} catch (FileNotFoundException e) {
 			System.out.println("[Error] readInFile, file not found!");
 		} catch (IOException e) {

@@ -37,7 +37,7 @@ public class SocketForNext extends Thread{
 		}
 		
 		System.out.println("IP:Host = " + "127.0.0.1" + ":" + this.port);
-		char c = (char) ('A' -1 + this.port%10);
+		char c = (char) ('A' -1 + (int)(this.port%10));
 		TCPsocket.nodeName = "" + c;
 		System.out.println("My Node Name : " + TCPsocket.nodeName);
 		

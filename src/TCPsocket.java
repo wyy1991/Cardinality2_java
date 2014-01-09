@@ -16,7 +16,6 @@ public class TCPsocket extends Thread{
 	// client socket for the next node
 	public static void main(String[] args) throws IOException {
 
-
 		
 		
 		
@@ -52,13 +51,19 @@ public class TCPsocket extends Thread{
 		prev_socket = new SocketForPrev(ipPrev, portPrev);
 		
 		
-		while (prevConnected != true || nextConnected != true){
-			;
+		while (!((prevConnected == true) && (nextConnected == true))){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
 		}
+		System.out.print("Both connected !");
 		// from here connected
 		// read in file line by line
 		// E(m) encrypt line by line murmur encrypt
 		// P(E(m)) shuffle
+
 		myData = new Data();
 		myData.readInFile();
 		myData.encryptMyFile();
