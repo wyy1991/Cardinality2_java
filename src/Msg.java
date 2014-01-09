@@ -23,6 +23,7 @@ public class Msg implements Serializable{
 		origin = or;
 		encryptedBy = by;
 		content = con;
+		whoGot = new ArrayList<String>();
 	}
 	
 	public static Msg createMyNewFileMsg(){
