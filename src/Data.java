@@ -11,17 +11,22 @@ public class Data {
 	
 	public String fileName;
 	public ArrayList<String> myFile = null;
+	public ArrayList<Long> hashFile = null;
 	public ArrayList<Long> encryptedMyFile = null;
 	
 	
 	public Data(){
-		fileName = "src/" + TCPsocket.nodeName + ".txt";
+		String fname =  TCPsocket.nodeName + ".txt";
+		this.fileName = this.getClass().getResource(fname).getFile();
+		System.out.println("file name:"+this.fileName);
 		myFile = new ArrayList<String>();
+		hashFile = new ArrayList<Long>();
 		encryptedMyFile = new ArrayList<Long>();
 	}
 	
 	public void readInFile(){
-		System.out.print("[Data] start read in file...");
+		System.out.println("[Data] start read in file...");
+		System.out.println("[Data]" + this.fileName);
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
@@ -30,7 +35,7 @@ public class Data {
 			    // put in to myFile
 				myFile.add(line);
 			}
-			System.out.println("[Data]read file" + this.fileName);
+			System.out.println("[Data]read file success !");
 		} catch (FileNotFoundException e) {
 			System.out.println("[Error] readInFile, file not found!");
 		} catch (IOException e) {
@@ -39,15 +44,48 @@ public class Data {
 	}
 	
 	
-	public void encryptMyFile(){
-		if (encryptedMyFile.size() != 0){
-			System.out.println("[Data] Already encrypted!");
+	
+	public void hashMyFile(){
+		if (this.hashFile.size() != 0){
+			System.out.println("[Data] Already hashed!");
 			return;
 		}
 		for (String line : this.myFile){
-			this.encryptedMyFile.add(murmurHashString(line));
+			this.hashFile.add(murmurHashString(line));
 		}
+		System.out.println("[Data] Got my file hashed!");
+	}
+	
+	public Long encrypt(long val){
+		// todo add PohligHellMan encryption
+		return val;
+	}
+	
+	public ArrayList<Long> encryptFile(ArrayList<Long> file){
+		ArrayList<Long> encFile  = new ArrayList<Long>();
+		for (Long val : file){
+			encFile.add(this.encrypt(val));
+		}
+		return encFile;
+	}
+	
+	public void encryptMyFile(){
+		if (this.encryptedMyFile.size() != 0 ){
+			System.out.println("[Data] Already encrypted!");
+			return;
+		}
+		this.encryptedMyFile = this.encryptFile(this.hashFile);
 		System.out.println("[Data] Got my file encrypted!");
+		System.out.println("[Test]last line:" + this.encryptedMyFile.get(this.encryptedMyFile.size()-1));
+	}
+	
+	public ArrayList<Long> shuffle(ArrayList<Long> file){
+		Collections.shuffle(file);
+		return file;
+	}
+	
+	public void shuffleMyEncFile(){
+		Collections.shuffle(this.encryptedMyFile);
 	}
 	
 	public long murmurHashString(String str){
@@ -59,9 +97,7 @@ public class Data {
 		return MurmurHash.hash64(data, length);
 	}
 	
-	public void shuffleMyEncFile(){
-		Collections.shuffle(this.encryptedMyFile);
-	}
+	
 	
 	public byte[] longToBytes(long x) {
 	    ByteBuffer buffer = ByteBuffer.allocate(8);

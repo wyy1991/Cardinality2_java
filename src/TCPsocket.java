@@ -10,26 +10,11 @@ public class TCPsocket extends Thread{
 	public static Data myData = null;
 	public static SocketForNext next_socket = null;
 	public static SocketForPrev prev_socket = null;
-	public static String nodeName = "0";
+	public static String nodeName = "C";
 	
 	// both server socket for the previous node 
 	// client socket for the next node
 	public static void main(String[] args) throws IOException {
-
-		
-		
-		
-		/*// test murmur hash
-		System.out.println( myData.murmurHashString("Hello my name is irene !"));
-		System.out.println( myData.murmurHashBytes(myData.longToBytes(myData.murmurHashString("Hello my name is irene !"))));
-		
-		byte[] content = myData.longToBytes(12345);
-		MurmurHash.hash32(content, content.length );
-		
-		System.out.println(MurmurHash.hash32(myData.longToBytes(MurmurHash.hash32(content, content.length, 1 )), myData.longToBytes(MurmurHash.hash32(content, content.length, 1 )).length, 2));
-		System.out.println(MurmurHash.hash32(myData.longToBytes(MurmurHash.hash32(content, content.length, 2 )), myData.longToBytes(MurmurHash.hash32(content, content.length, 2 )).length, 1));
-		*/
-		
 		
 		// open up a new socket to communicate with next node
 		next_socket = new SocketForNext();
@@ -66,8 +51,10 @@ public class TCPsocket extends Thread{
 
 		myData = new Data();
 		myData.readInFile();
+		myData.hashMyFile();
 		myData.encryptMyFile();
 		myData.shuffleMyEncFile();
+		
 		
 		
 		// send to next node

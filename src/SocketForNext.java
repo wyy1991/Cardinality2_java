@@ -68,11 +68,14 @@ public class SocketForNext extends Thread{
 	
 	
 	public void sendObjToNextNode(Msg obj){
-        try {
-			outputStream.writeObject(obj);
-		} catch (IOException e) {
-			System.out.println("[Error]send object!");
-		}
+			try {
+				outputStream.writeObject(obj);
+				outputStream.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
 	
 	public void sendToNextNode(String msg){

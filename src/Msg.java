@@ -1,15 +1,18 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Msg {
+public class Msg implements Serializable{
 	
-	public String type = "";
+	public String type = "TypeNone";
 	public ArrayList<String> encryptedBy = null;
+	public ArrayList<String> whoGot = null;
 	public ArrayList<Long> content = null;
 	
 	public Msg(){
-		type = "";
+		type = "TypeNone";
 		encryptedBy = new ArrayList<String>();
+		whoGot = new ArrayList<String>();
 		content = new ArrayList<Long>();
 	}
 	
