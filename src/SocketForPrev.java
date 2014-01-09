@@ -1,4 +1,5 @@
 import java.net.*; 
+import java.util.ArrayList;
 import java.io.*; 
 
 public class SocketForPrev extends Thread {
@@ -75,14 +76,63 @@ public class SocketForPrev extends Thread {
 
 	}
 	
+	public void gotPassOnToEncryptMsg(Msg msgObj){
+		// check if I need to encrypt, 
+		if (false == msgObj.encryptedBy.contains(TCPsocket.nodeName)){
+			//if yes, encrypt, and pass on to next
+			System.out.println("process msg to pass on...");
+			ArrayList<Long> enc_cont = Data.encryptFile(msgObj.content); // encrypt
+			msgObj.content = Data.shuffle(enc_cont); // shuffle
+			msgObj.encryptedBy.add(TCPsocket.nodeName); // add encrypted by
+			TCPsocket.next_socket.sendObjToNextNode(msgObj); // send to next
+			
+			
+		}else{
+			// if I have already encrypted, 
+			// create DoneEncrypted msg send to next
+			System.out.println("Final my message to broadcast...");
+			msgObj.type = "DoneEncrypted";
+			TCPsocket.myData.insertFinalSet(msgObj.origin, msgObj.content);	// store in Data
+			msgObj.whoGot.add(TCPsocket.nodeName); // note i got the file
+			TCPsocket.next_socket.sendObjToNextNode(msgObj); // send to next
+			
+		
+		}
+	}
+	
+	public void gotDoneEncryptedMsg(Msg msgObj){
+		// check if i got the message before
+		// if got, stop pass it on
+		// if not, store, add my name into who got and pass on
+		if (true == msgObj.whoGot.contains(TCPsocket.nodeName)){
+			System.out.println("Stop broadcast.");
+		}else{
+			System.out.println("Final my message to broadcast...");
+			TCPsocket.myData.insertFinalSet(msgObj.origin, msgObj.content);	// store in Data
+			msgObj.whoGot.add(TCPsocket.nodeName); // note i got the file
+			TCPsocket.next_socket.sendObjToNextNode(msgObj); // send to next
+		}
+		
+	
+	}
+	/*
 	public void pendingMsgFromPrev(String rawMsg){
 		// check message
 		System.out.println("[From Prev]" + rawMsg);
 	}
+	*/
 	public void pendingMsgObjFromPrev(Msg msgObj){
 		// check message
+		System.out.println("[From Prev obj]" + msgObj.type );
+		if (msgObj.type.equals("PassOnToEncrypt")){
+			gotPassOnToEncryptMsg(msgObj);
+		}else if (msgObj.type.equals("DoneEncrypted")){
+			gotDoneEncryptedMsg(msgObj);
+		}else{
+			
+		}
+			
 		
-		System.out.println("[From Prev obj]" + msgObj.type  );
 	}
 	
 	/*

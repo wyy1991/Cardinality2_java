@@ -55,13 +55,27 @@ public class TCPsocket extends Thread{
 		myData.encryptMyFile();
 		myData.shuffleMyEncFile();
 		
+		userInput = null;
+		while((userInput = stdIn.readLine()) != null){
+			if (userInput.equals("s")){
+				//start create message send to next node
+				Msg mymsg = Msg.createMyNewFileMsg();
+				next_socket.sendObjToNextNode(mymsg);
+				
+			}
+			if (userInput.equals("c")){
+				// start checking the same ones
+				// @@@ todo 
+			}
+			if (userInput.equals("q")){
+				//quit
+				stdIn.close();
+				System.exit(1);
+			}
+		}
 		
 		
-		// send to next node
-		Msg mymsg = Msg.createMyNewFileMsg();
-		next_socket.sendObjToNextNode(mymsg);
 		
-		stdIn.close();
 	}
 	
 	

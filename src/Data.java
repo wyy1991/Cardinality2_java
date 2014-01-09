@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Data {
@@ -13,6 +15,7 @@ public class Data {
 	public ArrayList<String> myFile = null;
 	public ArrayList<Long> hashFile = null;
 	public ArrayList<Long> encryptedMyFile = null;
+	public HashMap<String, ArrayList<Long> > finalSet= null;
 	
 	
 	public Data(){
@@ -22,6 +25,12 @@ public class Data {
 		myFile = new ArrayList<String>();
 		hashFile = new ArrayList<Long>();
 		encryptedMyFile = new ArrayList<Long>();
+		this.finalSet = new HashMap<String, ArrayList<Long> >();
+	}
+	
+	public void insertFinalSet(String key, ArrayList<Long> content){
+		this.finalSet.put(key, content);
+		System.out.println("[Data]Stored data " + key + ".");
 	}
 	
 	public void readInFile(){
@@ -56,18 +65,8 @@ public class Data {
 		System.out.println("[Data] Got my file hashed!");
 	}
 	
-	public Long encrypt(long val){
-		// todo add PohligHellMan encryption
-		return val;
-	}
 	
-	public ArrayList<Long> encryptFile(ArrayList<Long> file){
-		ArrayList<Long> encFile  = new ArrayList<Long>();
-		for (Long val : file){
-			encFile.add(this.encrypt(val));
-		}
-		return encFile;
-	}
+	
 	
 	public void encryptMyFile(){
 		if (this.encryptedMyFile.size() != 0 ){
@@ -79,10 +78,6 @@ public class Data {
 		System.out.println("[Test]last line:" + this.encryptedMyFile.get(this.encryptedMyFile.size()-1));
 	}
 	
-	public ArrayList<Long> shuffle(ArrayList<Long> file){
-		Collections.shuffle(file);
-		return file;
-	}
 	
 	public void shuffleMyEncFile(){
 		Collections.shuffle(this.encryptedMyFile);
@@ -110,5 +105,22 @@ public class Data {
 	    buffer.put(bytes);
 	    buffer.flip();//need flip 
 	    return buffer.getLong();
+	}
+	
+	public static Long encrypt(long val){
+		// todo add PohligHellMan encryption
+		return val;
+	}
+	public static ArrayList<Long> shuffle(ArrayList<Long> file){
+		Collections.shuffle(file);
+		return file;
+	}
+	
+	public static ArrayList<Long> encryptFile(ArrayList<Long> file){
+		ArrayList<Long> encFile  = new ArrayList<Long>();
+		for (Long val : file){
+			encFile.add(encrypt(val));
+		}
+		return encFile;
 	}
 }
