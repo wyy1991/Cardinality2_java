@@ -11,10 +11,19 @@ public class TCPsocket extends Thread{
 	public static SocketForNext next_socket = null;
 	public static SocketForPrev prev_socket = null;
 	public static String nodeName = "C";
+	public static ServerSocket listenSocket = null; 
 	
 	// both server socket for the previous node 
 	// client socket for the next node
 	public static void main(String[] args) throws IOException {
+		
+		
+		if (args.length > 0 && args[0].equals("server")){
+			new ServerNode();
+			listenSocket.close();
+			System.exit(1);
+		}
+		
 		
 		// open up a new socket to communicate with next node
 		next_socket = new SocketForNext();
@@ -71,6 +80,7 @@ public class TCPsocket extends Thread{
 			if (userInput.equals("q")){
 				//quit
 				stdIn.close();
+				listenSocket.close();
 				System.exit(1);
 			}
 		}

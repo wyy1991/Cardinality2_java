@@ -22,12 +22,12 @@ public class SocketForNext extends Thread{
 	}
 	
 	public void run(){
-		ServerSocket serverSocket = null; 
+		TCPsocket.listenSocket = null; 
 		boolean portNumNotFound = true;
 		while (portNumNotFound){
 			try { 
 				this.port += 1;
-				serverSocket = new ServerSocket(port); 
+				TCPsocket.listenSocket = new ServerSocket(port); 
 				portNumNotFound = false;
 		    } 
 		    catch (IOException e){ 
@@ -44,7 +44,7 @@ public class SocketForNext extends Thread{
 	    System.out.println ("Waiting for connection.....");
 
 	    try { 
-	    	nextSocket = serverSocket.accept(); 
+	    	nextSocket = TCPsocket.listenSocket.accept(); 
 	    	PrintWriter out = new PrintWriter(nextSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader( new InputStreamReader( nextSocket.getInputStream()));
 			
@@ -52,7 +52,6 @@ public class SocketForNext extends Thread{
 			inputStream = new ObjectInputStream(nextSocket.getInputStream());
 			
 			
-			serverSocket.close(); 
 	    } 
 	    catch (IOException e) { 
 	    	System.err.println("Accept failed."); 
