@@ -2,11 +2,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 public class Data {
@@ -16,16 +18,24 @@ public class Data {
 	public ArrayList<Long> hashFile = null;
 	public ArrayList<Long> encryptedMyFile = null;
 	public HashMap<String, ArrayList<Long> > finalSet= null;
-	
+	public BigInteger publicKey = BigInteger.ZERO;
 	
 	public Data(){
-		String fname =  TCPsocket.nodeName + ".txt";
+		publicKey = generatePubKey();
+		System.out.println("[Data] Public Key = " + publicKey);
+		String fname = TCPsocket.nodeName + ".txt";
 		this.fileName = this.getClass().getResource(fname).getFile();
 		System.out.println("file name:"+this.fileName);
 		myFile = new ArrayList<String>();
 		hashFile = new ArrayList<Long>();
 		encryptedMyFile = new ArrayList<Long>();
 		this.finalSet = new HashMap<String, ArrayList<Long> >();
+	}
+	
+	public BigInteger generatePubKey(){
+		Random ran = new Random(System.currentTimeMillis());
+		BigInteger pub =  BigInteger.valueOf( ran.nextInt(99999));
+		return pub;
 	}
 	
 	public void insertFinalSet(String key, ArrayList<Long> content){

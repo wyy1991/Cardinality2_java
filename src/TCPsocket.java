@@ -80,7 +80,6 @@ public class TCPsocket extends Thread{
 			if (userInput.equals("q")){
 				//quit
 				stdIn.close();
-				listenSocket.close();
 				System.exit(1);
 			}
 		}

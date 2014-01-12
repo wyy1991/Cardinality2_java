@@ -131,8 +131,6 @@ public class SocketForPrev extends Thread {
 		}else{
 			
 		}
-			
-		
 	}
 	
 	/*

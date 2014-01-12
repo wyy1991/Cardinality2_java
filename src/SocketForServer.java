@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -37,6 +38,50 @@ public class SocketForServer extends Thread{
 	    } 
 	    
 	    System.out.println ("[Server Node] Connected!");
+	    try {
+			TCPsocket.listenSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Close listen socket failed."); 
+		}
+	    
+	    
+	    // generate public key
+	    // send to server
+	    Msg myPubMsg = Msg.createMyPubKeyMsg(TCPsocket.myData.publicKey);
+	    this.sendObjToServerNode(myPubMsg);
+	    
+	    this.waitingForServerMsgObj();
 	    
 	}
+	
+
+	
+
+	private void waitingForServerMsgObj(){
+		Msg msgIn = null;
+		try {
+			while((msgIn = (Msg) inputStream.readObject())!= null){
+				
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendObjToServerNode(Msg obj){
+			try {
+				outputStream.writeObject(obj);
+				outputStream.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
+	
 }

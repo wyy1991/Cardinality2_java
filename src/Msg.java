@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 
@@ -9,6 +10,8 @@ public class Msg implements Serializable{
 	public ArrayList<String> encryptedBy = null;
 	public ArrayList<String> whoGot = null;
 	public ArrayList<Long> content = null;
+	public BigInteger pubKey = null;
+	public BigInteger bigB_n = null;
 	
 	public Msg(){
 		type = "TypeNone";
@@ -16,6 +19,8 @@ public class Msg implements Serializable{
 		encryptedBy = new ArrayList<String>();
 		whoGot = new ArrayList<String>();
 		content = new ArrayList<Long>();
+		pubKey = null;
+		bigB_n = null;
 	}
 	
 	public Msg(String t,String or, ArrayList<String> by, ArrayList<Long> con ){
@@ -24,6 +29,8 @@ public class Msg implements Serializable{
 		encryptedBy = by;
 		content = con;
 		whoGot = new ArrayList<String>();
+		pubKey = null;
+		bigB_n = null;
 	}
 	
 	public static Msg createMyNewFileMsg(){
@@ -33,4 +40,14 @@ public class Msg implements Serializable{
 		ArrayList<Long> con_tmp = TCPsocket.myData.encryptedMyFile;
 		return new Msg(t_tmp,TCPsocket.nodeName, by_tmp, con_tmp );
 	}
+	
+	
+	public static Msg createMyPubKeyMsg(BigInteger pub){
+		Msg msg = new Msg();
+		msg.type = "MyPubKey";
+		msg.pubKey = pub;
+		return msg;
+	}
+	
+	public static Msg createMy
 }
