@@ -1,134 +1,51 @@
+import java.math.BigInteger;
+import java.util.Random;
 
-/**
- * Title:        Example of Polig Hellman method of Discret Logs
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:
- * @author Burton Rosenberg
- * @version 1.0
- */
 
 public class PohligHellman {
 
-  public PohligHellman() {
-  }
-  /*
-  public static void main(String[] args) {
-    PohligHellman ph = new PohligHellman();
-    ph.entryPoint(12) ;
-  }
-  */
-
-  public void entryPoint(int mystery_index)
-  {
-     int gen = 3 ;
-     int modu = 17 ;
-     int order = 16 ;
-
-     // prove 3 generates Z/17Z
-     System.out.println("Demonstrate that 3 generates Z/17Z.") ;
-     this.cycle(gen,modu) ;
-     System.out.println() ;
-
-     // calculate and check gen_inv
-     int gen_inv = pwr ( gen, order-1, modu ) ;
-     System.out.println( gen + " * " + gen_inv + " = " + (gen*gen_inv)%17);
-     System.out.println();
-
-     setMagicPower( 2, order ) ;
-     int mp = getMagicPower();
-     int possible_coeff_1 = pwr( gen, mp, modu ) ;
-     System.out.println("We should either get 1 or " + possible_coeff_1 +
-        " during PH index extractions" ) ;
-
-    // create mystery number
-     int mystery = pwr( gen, mystery_index, modu ) ;
-     System.out.println("Mystery: " + mystery );
-
-     int coeff_index = 0 ;
-     int coeff_power = 1 ;
-     while ( isNextMagicPower() )
-     {
-        // kill all but leading term of current_factor-adic expansion
-        // of index of mystery
-        System.out.println("magic power: " + getMagicPower());
-        int this_reduction = pwr( mystery, nextMagicPower(), modu ) ;
-
-        System.out.println(coeff_index + ", reduction: " + this_reduction );
-        if ( this_reduction==possible_coeff_1 )
-        {
-            // coeff is 1
-            System.out.println(coeff_index + ", coeffic: " + 1 ) ;
-            mystery = mystery * pwr(gen_inv,coeff_power,modu) % modu ;
-            System.out.println("New mystery: "+ mystery );
-        }
-        else
-        {
-            // coeff is 0
-            System.out.println(coeff_index + ", coeffic: " + 0 ) ;
-        }
-        coeff_index++ ;
-        coeff_power *= 2 ;
-     }
-
-  }
-
-  int pMagicPower ;
-  int pCurrentFactor ;
-
-  public void setMagicPower( int current_factor, int group_order )
-  {
-      // ASSERT : current_factor | group_order
-      pMagicPower = group_order ;
-      pCurrentFactor = current_factor ;
-  }
-
-  public boolean isNextMagicPower()
-  {
-      if ( pMagicPower % pCurrentFactor == 0 ) return true ;
-      else return false;
-  }
-
-  public int getMagicPower()
-  {
-      return pMagicPower / pCurrentFactor ;
-  }
-
-  public int nextMagicPower( )
-  {
-      return pMagicPower = pMagicPower/pCurrentFactor ;
-  }
-
-  public int pwr(int base, int expon, int modu)
-  {
-      // recursive base^expon % modu
-      base %= modu ;
-      if (expon==0) return 1 ;
-      if (expon==1) return base ;
-      if ((expon%2)==0 )
-      {
-           int t = pwr( base, expon/2, modu ) ;
-           return t*t % modu;
-      }
-      else
-      {
-           int t = pwr( base, expon-1, modu ) ;
-           return base*t % modu ;
-      }
-  }
-
-  public int cycle(int gen, int modu)
-  {
-     // Assume gen^i =1 % modul for some i>0
-     int g = gen ;
-     int i = 1 ;
-     while ( g!=1 )
-     {
-         System.out.println(i + ": " + g) ;
-         g = (g*gen)%modu ;
-         i++ ;
-      }
-      System.out.println(i + ": " + g) ;
-      return i ;
-  }
+	private static BigInteger bigB_P_1_Q_1 = BigInteger.ZERO;
+	public static BigInteger bigB_N = BigInteger.ZERO;
+	//------server use--------------------------
+	public static BigInteger generateKey(){
+		//key generation:
+		Random rand1 = new Random(System.currentTimeMillis());   // Generating a random number/
+		Random rand2 = new Random(System.currentTimeMillis()*10);  // Generating another random number
+		// code for receiving public keys from all the parties (e.g., Alice, Bob, etc. ) 
+		BigInteger bigB_p = BigInteger.probablePrime(512, rand1);   // 512 is a default size
+		BigInteger bigB_q = BigInteger.probablePrime(512, rand2);
+		BigInteger bigB_n = bigB_p.multiply(bigB_q);
+		BigInteger bigB_p_1 = bigB_p.subtract(BigInteger.ONE);  //p-1
+		BigInteger bigB_q_1 = bigB_q.subtract(BigInteger.ONE);  //q-1
+		BigInteger bigB_p_1_q_1 = bigB_p_1.multiply(bigB_q_1);
+		PohligHellman.bigB_P_1_Q_1 = bigB_p_1_q_1;
+		PohligHellman.bigB_N = bigB_n;
+		return bigB_n;
+	}
+	
+	public static BigInteger revisePubKey (BigInteger pubKey_Alice){
+		// we want gcd ==1 
+		BigInteger BigB_GCD = PohligHellman.bigB_P_1_Q_1.gcd(pubKey_Alice);
+	    while (!BigB_GCD.equals(BigInteger.ONE)){
+	        pubKey_Alice = pubKey_Alice.add(BigInteger.ONE);
+	        BigB_GCD = PohligHellman.bigB_P_1_Q_1.gcd(pubKey_Alice);
+	    }
+		return pubKey_Alice;
+	}
+	
+	
+	//------client use----------------
+	public static BigInteger generatePubKey(){
+		Random ran = new Random(System.currentTimeMillis());
+		BigInteger pub =  BigInteger.valueOf( ran.nextInt(99999));
+		return pub;
+	}
+	
+	public static BigInteger encrypt (BigInteger val, BigInteger pubKey, BigInteger bigB_n){
+		BigInteger bigB_cipherVal = val.modPow(pubKey, bigB_n);  
+		return bigB_cipherVal;
+	}
+	
+	
+	
 }

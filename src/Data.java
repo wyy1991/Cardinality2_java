@@ -21,7 +21,7 @@ public class Data {
 	public BigInteger publicKey = BigInteger.ZERO;
 	
 	public Data(){
-		publicKey = generatePubKey();
+		publicKey = PohligHellman.generateKey();
 		System.out.println("[Data] Public Key = " + publicKey);
 		String fname = TCPsocket.nodeName + ".txt";
 		this.fileName = this.getClass().getResource(fname).getFile();
@@ -32,11 +32,7 @@ public class Data {
 		this.finalSet = new HashMap<String, ArrayList<Long> >();
 	}
 	
-	public BigInteger generatePubKey(){
-		Random ran = new Random(System.currentTimeMillis());
-		BigInteger pub =  BigInteger.valueOf( ran.nextInt(99999));
-		return pub;
-	}
+	
 	
 	public void insertFinalSet(String key, ArrayList<Long> content){
 		this.finalSet.put(key, content);

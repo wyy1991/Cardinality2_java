@@ -16,9 +16,9 @@ public class Msg implements Serializable{
 	public Msg(){
 		type = "TypeNone";
 		origin = "";
-		encryptedBy = new ArrayList<String>();
-		whoGot = new ArrayList<String>();
-		content = new ArrayList<Long>();
+		encryptedBy = null;
+		whoGot = null;
+		content = null;
 		pubKey = null;
 		bigB_n = null;
 	}
@@ -49,5 +49,12 @@ public class Msg implements Serializable{
 		return msg;
 	}
 	
-	public static Msg createMy
+	public static Msg createBigNMsg(BigInteger bign, BigInteger pub){
+		Msg msg = new Msg();
+		msg.type = "BigN";
+		msg.bigB_n = bign;
+		msg.pubKey = pub;
+		return msg;
+		
+	}
 }

@@ -47,7 +47,9 @@ public class ServerNode extends Thread{
 		}
 	}
 	
-	
+	public void computeAndSendBigN(){
+		
+	}
 	
 	
 }
