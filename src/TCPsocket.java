@@ -7,6 +7,7 @@ public class TCPsocket extends Thread{
 
 	public static boolean prevConnected = false;
 	public static boolean nextConnected = false;
+	public static boolean keysGot = false;
 	public static Data myData = null;
 	public static SocketForNext next_socket = null;
 	public static SocketForPrev prev_socket = null;
@@ -17,7 +18,7 @@ public class TCPsocket extends Thread{
 	// client socket for the next node
 	public static void main(String[] args) throws IOException {
 		
-		
+		// if is server, run server code
 		if (args.length > 0 && args[0].equals("server")){
 			new ServerNode();
 			listenSocket.close();
@@ -58,12 +59,23 @@ public class TCPsocket extends Thread{
 		// E(m) encrypt line by line murmur encrypt
 		// P(E(m)) shuffle
 
-		myData = new Data();
+		myData = new Data(); //also generate pubkey
 		myData.readInFile();
 		myData.hashMyFile();
 		myData.encryptMyFile();
 		myData.shuffleMyEncFile();
 		
+		System.out.print("Wait for server to connect ... ");
+		SocketForServer serverSocket = new SocketForServer();
+		while (!keysGot){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		
+		System.out.print("Make sure all nodes get keys. Input 's' to start...");
 		userInput = null;
 		while((userInput = stdIn.readLine()) != null){
 			if (userInput.equals("s")){

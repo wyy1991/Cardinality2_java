@@ -18,14 +18,10 @@ public class SocketForServer extends Thread{
 	private ObjectOutputStream outputStream = null;
 	
 	public SocketForServer(){
-		
-		
 		start();
 	}
 	
 	public void run(){
-		
-
 	    System.out.println ("Waiting for Server node connection ....");
 	    try { 
 	    	servSocket = TCPsocket.listenSocket.accept(); 
@@ -45,11 +41,13 @@ public class SocketForServer extends Thread{
 			System.err.println("Close listen socket failed."); 
 		}
 	    
+	    System.out.print("Server connected !");
 	    
-	    // generate public key
+	    // generate public key msg
 	    // send to server
 	    Msg myPubMsg = Msg.createMyPubKeyMsg(TCPsocket.myData.publicKey);
 	    this.sendObjToServerNode(myPubMsg);
+	    System.out.print("[To Server] myPubMsg !");
 	    
 	    this.waitingForServerMsgObj();
 	    
@@ -61,9 +59,12 @@ public class SocketForServer extends Thread{
 	private void waitingForServerMsgObj(){
 		Msg msgIn = null;
 		try {
-			while((msgIn = (Msg) inputStream.readObject())!= null){
-				
+			msgIn = (Msg) inputStream.readObject();
+			if (msgIn.type.equals("BigN")){
+				// got big n
+				processBigNMsg(msgIn);
 			}
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,6 +73,15 @@ public class SocketForServer extends Thread{
 			e.printStackTrace();
 		}
 	}
+	
+	private void processBigNMsg(Msg msg){
+		TCPsocket.myData.pohli_n = msg.bigB_n;
+		TCPsocket.myData.publicKey = msg.pubKey;
+		TCPsocket.keysGot = true;
+		System.out.println("[From Server] bigB_n = ");
+		System.out.println("[From Server] pohli_n = ");
+	}
+	
 	
 	public void sendObjToServerNode(Msg obj){
 			try {

@@ -38,7 +38,7 @@ public class SocketFromServer extends Thread {
                                + "the connection to: " + ip);
             System.exit(1);
         }
-        System.out.println("[Server node] connected!");
+        System.out.println("[Server node] connected to "+this.ip + ":" + this.port);
         
         waitingForNodeMsgObj();
 	}
@@ -46,10 +46,9 @@ public class SocketFromServer extends Thread {
 	public void waitingForNodeMsgObj(){
 		Msg msgIn = null;
 		try {
-			while((msgIn = (Msg) inputStream.readObject())!= null){
-				//@@@ todo 
-				pendingMsgObjFromNodes(msgIn);
-			}
+			msgIn = (Msg) inputStream.readObject();
+			pendingMsgObjFromNodes(msgIn);
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,7 +70,7 @@ public class SocketFromServer extends Thread {
 		
 	}
 
-	public void sendObjToServer(Msg obj){
+	public void sendObjToNodes(Msg obj){
 			try {
 				outputStream.writeObject(obj);
 				outputStream.flush();

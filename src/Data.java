@@ -19,10 +19,11 @@ public class Data {
 	public ArrayList<Long> encryptedMyFile = null;
 	public HashMap<String, ArrayList<Long> > finalSet= null;
 	public BigInteger publicKey = BigInteger.ZERO;
+	public BigInteger pohli_n = BigInteger.ZERO;
 	
 	public Data(){
 		publicKey = PohligHellman.generateKey();
-		System.out.println("[Data] Public Key = " + publicKey);
+		//System.out.println("[Data] Public Key = " + publicKey);
 		String fname = TCPsocket.nodeName + ".txt";
 		this.fileName = this.getClass().getResource(fname).getFile();
 		System.out.println("file name:"+this.fileName);
@@ -115,6 +116,8 @@ public class Data {
 	
 	public static Long encrypt(long val){
 		// todo add PohligHellMan encryption
+		
+		
 		return val;
 	}
 	public static ArrayList<Long> shuffle(ArrayList<Long> file){
