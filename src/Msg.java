@@ -9,7 +9,7 @@ public class Msg implements Serializable{
 	public String origin = "";
 	public ArrayList<String> encryptedBy = null;
 	public ArrayList<String> whoGot = null;
-	public ArrayList<Long> content = null;
+	public ArrayList<BigInteger> content = null;
 	public BigInteger pubKey = null;
 	public BigInteger bigB_n = null;
 	
@@ -23,7 +23,7 @@ public class Msg implements Serializable{
 		bigB_n = null;
 	}
 	
-	public Msg(String t,String or, ArrayList<String> by, ArrayList<Long> con ){
+	public Msg(String t,String or, ArrayList<String> by, ArrayList<BigInteger> con ){
 		type = t;
 		origin = or;
 		encryptedBy = by;
@@ -37,7 +37,7 @@ public class Msg implements Serializable{
 		String t_tmp = "PassOnToEncrypt";
 		ArrayList<String> by_tmp = new ArrayList<String>();
 		by_tmp.add(TCPsocket.nodeName);
-		ArrayList<Long> con_tmp = TCPsocket.myData.encryptedMyFile;
+		ArrayList<BigInteger> con_tmp = TCPsocket.myData.encryptedMyFile;
 		return new Msg(t_tmp,TCPsocket.nodeName, by_tmp, con_tmp );
 	}
 	

@@ -64,8 +64,7 @@ public class TCPsocket extends Thread{
 		myData = new Data(); //also generate pubkey
 		myData.readInFile();
 		myData.hashMyFile();
-		myData.encryptMyFile();
-		myData.shuffleMyEncFile();
+		
 		
 		System.out.print("Wait for server to connect ... ");
 		SocketForServer serverSocket = new SocketForServer();
@@ -81,6 +80,9 @@ public class TCPsocket extends Thread{
 		userInput = null;
 		while((userInput = stdIn.readLine()) != null){
 			if (userInput.equals("s")){
+				// encrypt my data first
+				myData.encryptMyFile();
+				myData.shuffleMyEncFile();
 				//start create message send to next node
 				Msg mymsg = Msg.createMyNewFileMsg();
 				next_socket.sendObjToNextNode(mymsg);
@@ -88,8 +90,7 @@ public class TCPsocket extends Thread{
 			}
 			if (userInput.equals("c")){
 				// start checking the same ones
-				// @@@ todo 
-				myData.getSameNumOfLinesInFinalSet();
+				int resultNum = myData.getSameNumOfLinesInFinalSet();
 			}
 			if (userInput.equals("q")){
 				//quit

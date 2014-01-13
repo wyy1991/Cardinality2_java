@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.net.*; 
 import java.util.ArrayList;
 import java.io.*; 
@@ -81,7 +82,7 @@ public class SocketForPrev extends Thread {
 		if (false == msgObj.encryptedBy.contains(TCPsocket.nodeName)){
 			//if yes, encrypt, and pass on to next
 			System.out.println("process msg to pass on...");
-			ArrayList<Long> enc_cont = Data.encryptFile(msgObj.content); // encrypt
+			ArrayList<BigInteger> enc_cont = TCPsocket.myData.encryptFile(msgObj.content); // encrypt
 			msgObj.content = Data.shuffle(enc_cont); // shuffle
 			msgObj.encryptedBy.add(TCPsocket.nodeName); // add encrypted by
 			TCPsocket.next_socket.sendObjToNextNode(msgObj); // send to next
