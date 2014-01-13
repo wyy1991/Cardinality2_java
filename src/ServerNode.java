@@ -53,6 +53,7 @@ public class ServerNode extends Thread{
 		// in the socketList, contains each node's pub_origin, 
 		// compute big_n, 
 		BigInteger bigN = PohligHellman.generateKey();
+		System.out.println("[Computed]BigN = "+ bigN);
 		Msg tmpMsg = null;
 		for (SocketFromServer soc : socketList){
 			soc.pub_final = PohligHellman.revisePubKey(soc.pub_origin);		// update each node's pub_final

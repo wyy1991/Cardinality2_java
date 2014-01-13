@@ -34,14 +34,8 @@ public class SocketForServer extends Thread{
 	    } 
 	    
 	    System.out.println ("[Server Node] Connected!");
-	    try {
-			TCPsocket.listenSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Close listen socket failed."); 
-		}
 	    
-	    System.out.print("Server connected !");
+	    
 	    
 	    // generate public key msg
 	    // send to server
@@ -78,8 +72,8 @@ public class SocketForServer extends Thread{
 		TCPsocket.myData.pohli_n = msg.bigB_n;
 		TCPsocket.myData.publicKey = msg.pubKey;
 		TCPsocket.keysGot = true;
-		System.out.println("[From Server] bigB_n = ");
-		System.out.println("[From Server] pohli_n = ");
+		System.out.println("[From Server] pohli_n = " + TCPsocket.myData.pohli_n);
+		System.out.println("[From Server] pubKey = " + TCPsocket.myData.publicKey);
 	}
 	
 	

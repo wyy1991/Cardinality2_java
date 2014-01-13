@@ -21,8 +21,10 @@ public class TCPsocket extends Thread{
 		// if is server, run server code
 		if (args.length > 0 && args[0].equals("server")){
 			new ServerNode();
-			listenSocket.close();
-			System.exit(1);
+			while(true){
+				;
+			}
+			//System.exit(1);
 		}
 		
 		

@@ -66,8 +66,6 @@ public class SocketFromServer extends Thread {
 			// store into server node 
 			this.pub_origin = msgObj.pubKey;
 		}
-			
-		
 	}
 
 	public void sendObjToNodes(Msg obj){
