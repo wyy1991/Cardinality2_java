@@ -1,51 +1,56 @@
-import java.io.*;
-import java.net.*;
+//EchoServer.java
+import java.net.*; 
+import java.io.*; 
 
+public class EchoServer 
+{ 
+ public static void main(String[] args) throws IOException 
+   { 
+    ServerSocket serverSocket = null; 
 
-public class EchoClient {
-    public static void main(String[] args) throws IOException {
+    try { 
+         serverSocket = new ServerSocket(10007); 
+        } 
+    catch (IOException e) 
+        { 
+         System.err.println("Could not listen on port: 10007."); 
+         System.exit(1); 
+        } 
 
-        String serverHostname = new String ("127.0.0.1");
+    Socket clientSocket = null; 
+    System.out.println ("Waiting for connection.....");
 
-        if (args.length > 0)
-           serverHostname = args[0];
-        System.out.println ("Attemping to connect to host " +
-		serverHostname + " on port 10007.");
+    try { 
+         clientSocket = serverSocket.accept(); 
+        } 
+    catch (IOException e) 
+        { 
+         System.err.println("Accept failed."); 
+         System.exit(1); 
+        } 
 
-        Socket echoSocket = null;
-        PrintWriter out = null;
-        BufferedReader in = null;
+    System.out.println ("Connection successful");
+    System.out.println ("Waiting for input.....");
 
-        try {
-            // echoSocket = new Socket("taranis", 7);
-            echoSocket = new Socket(serverHostname, 10008);
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(
-                                        echoSocket.getInputStream()));
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host: " + serverHostname);
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for "
-                               + "the connection to: " + serverHostname);
-            System.exit(1);
-        }
+    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), 
+                                      true); 
+    BufferedReader in = new BufferedReader( 
+            new InputStreamReader( clientSocket.getInputStream())); 
 
-	BufferedReader stdIn = new BufferedReader(
-                                   new InputStreamReader(System.in));
-	String userInput;
+    String inputLine; 
 
-        System.out.print ("input: ");
-	while ((userInput = stdIn.readLine()) != null) {
-	    out.println(userInput);
-	    System.out.println("echo: " + in.readLine());
-            System.out.print ("input: ");
-	}
+    while ((inputLine = in.readLine()) != null) 
+        { 
+         System.out.println ("Server: " + inputLine); 
+         out.println(inputLine); 
 
-	out.close();
-	in.close();
-	stdIn.close();
-	echoSocket.close();
-    }
-}
-// end
+         if (inputLine.equals("Bye.")) 
+             break; 
+        } 
+
+    out.close(); 
+    in.close(); 
+    clientSocket.close(); 
+    serverSocket.close(); 
+   } 
+} 
