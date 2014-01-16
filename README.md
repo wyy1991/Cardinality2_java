@@ -1,6 +1,7 @@
 
-
 Contact: yuye.wang@yale.edu
+Date: Jan 2014
+
 
 This project lets more than 2 peers to get the number of lines that are same within all their files, while keeping each of their files private and secured. 
 
